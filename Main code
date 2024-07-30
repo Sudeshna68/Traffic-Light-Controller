@@ -1,4 +1,4 @@
-module main( clk,reset,Vs,MR,MY,MG,SR,SY,SG);
+module Trafficlightcontroller( clk,reset,Vs,MR,MY,MG,SR,SY,SG);
 input clk,reset,Vs;
 output reg MR,MY,MG,SR,SY,SG;
 
