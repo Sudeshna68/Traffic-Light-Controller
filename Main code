@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module Trafficlightcontroller( clk,reset,Vs,MR,MY,MG,SR,SY,SG);
 input clk,reset,Vs;
 output reg MR,MY,MG,SR,SY,SG;
@@ -15,9 +16,10 @@ begin
       state<=s1;   count<=0;
     end
   else
+    begin
     count<=0;
     case(state)
-    s1: if(count<=TL && Vs==0)
+    s1: if(count<TL && Vs==0)
           begin
            state<=s1;   count<=count+1;
           end
@@ -25,7 +27,7 @@ begin
           begin
            state<=s2;   count<=0;
           end
-    s2: if(count<=TS)
+    s2: if(count<TS)
           begin
            state<=s2;   count<=count+1;
           end
@@ -33,7 +35,7 @@ begin
           begin
            state<=s3;   count<=0;
           end
-     s3: if(count<=TL && Vs==0)
+     s3: if(count<TL && Vs==0)
           begin
            state<=s3;   count<=count+1;
           end
@@ -41,7 +43,7 @@ begin
           begin
            state<=s4;   count<=0;
           end
-      s4: if(count<=TS)
+      s4: if(count<TS)
           begin
            state<=s4;   count<=count+1;
           end
@@ -51,6 +53,7 @@ begin
           end
       default: state<=s1;
       endcase
+  end
 end
 
 
