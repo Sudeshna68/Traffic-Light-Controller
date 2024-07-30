@@ -1,0 +1,82 @@
+module main( clk,reset,Vs,MR,MY,MG,SR,SY,SG);
+input clk,reset,Vs;
+output reg MR,MY,MG,SR,SY,SG;
+
+parameter TL=25, TS=4;
+parameter [1:0] s1=2'b00, s2=2'b01, s3=2'b11, s4=2'b10;
+
+reg [5:0] count;
+reg [1:0] state;
+
+always @(posedge clk or posedge reset)
+begin
+  if(reset)
+    begin
+      state<=s1;   count<=0;
+    end
+  else
+    count<=0;
+    case(state)
+    s1: if(count<=TL && Vs==0)
+          begin
+           state<=s1;   count<=count+1;
+          end
+        else
+          begin
+           state<=s2;   count<=0;
+          end
+    s2: if(count<=TS)
+          begin
+           state<=s2;   count<=count+1;
+          end
+        else
+          begin
+           state<=s3;   count<=0;
+          end
+     s3: if(count<=TL && Vs==0)
+          begin
+           state<=s3;   count<=count+1;
+          end
+        else
+          begin
+           state<=s4;   count<=0;
+          end
+      s4: if(count<=TS)
+          begin
+           state<=s4;   count<=count+1;
+          end
+        else
+          begin
+           state<=s1;   count<=0;
+          end
+      default: state<=s1;
+      endcase
+end
+
+
+always @(state)
+begin
+  case(state)
+  s1: begin
+      {MR,MY,MG}=3'b001;
+      {SR,SY,SG}=3'b100;
+      end
+  s2: begin
+      {MR,MY,MG}=3'b010;
+      {SR,SY,SG}=3'b100;
+      end
+  s3: begin
+      {MR,MY,MG}=3'b100;
+      {SR,SY,SG}=3'b001;
+      end
+  s4: begin
+      {MR,MY,MG}=3'b100;
+      {SR,SY,SG}=3'b010;
+      end
+  default: begin
+           {MR,MY,MG}=3'b000;
+           {SR,SY,SG}=3'b000;
+           end
+  endcase
+end
+endmodule
