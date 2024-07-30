@@ -1,0 +1,17 @@
+module Trafficlightcontroller_tb;
+reg clk, reset, Vs;
+wire MR, MY, MG, SR, SY, SG;
+
+Trafficlightcontroller TLC(.clk(clk), .reset(reset), .Vs(Vs), .MR(MR), .MY(MY), .MG(MG), .SR(SR), .SY(SY), .SG(SG));
+
+always #5 clk = ~clk;
+
+initial begin
+    reset = 1; Vs = 0; clk = 0;
+    #10; reset = 0;
+    #10; Vs = 1;
+    #200; Vs = 0;
+    #50 $finish;
+end
+
+endmodule
